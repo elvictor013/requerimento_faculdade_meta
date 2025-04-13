@@ -14,7 +14,7 @@ class MoodleService
     public function __construct()
     {
         $this->moodleUrl = env('MOODLE_URL', 'https://localhost/moodle'); // Agora pega do .env corretamente
-        $this->token = env('MOODLE_TOKEN', '39192bd02dffc3e747e3c8de7a9322ce');
+        $this->token = env('MOODLE_TOKEN', '110a17f3222ffbd1006880a402a2e5a6');
     }
 
 
