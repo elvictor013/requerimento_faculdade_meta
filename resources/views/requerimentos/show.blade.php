@@ -28,29 +28,26 @@
             <dt class="col-sm-3">Tipo de Requerimento:</dt>
             <dd class="col-sm-9">{{ $requerimentos->tipo_requerimento }}</dd>
 
+            <dt class="col-sm-3">status:</dt>
+            <dd class="col-sm-9">{{ $requerimentos->status}}</dd>
+
             <dt class="col-sm-3">Disciplinas:</dt>
-<dd class="col-sm-9">
-    @forelse ($requerimentos->disciplines as $disciplina)
-        {{ $disciplina->name }}<br>
-    @empty
-        Nenhuma disciplina vinculada.
-    @endforelse
-</dd>
+            <dd class="col-sm-9">
+                @if($requerimentos->disciplines->isEmpty())
+                Nenhuma disciplina vinculada.
+                @else
+                <ul>
+                    @foreach($requerimentos->disciplines as $disciplina)
+                    <li>{{ $disciplina->name }}</li>
+                    @endforeach
+                </ul>
+                @endif
+            </dd>
 
-
-
-            <dt class="col-sm-3">Descrição:</dt>
-            <dd class="col-sm-9">{{ $requerimentos->descricao }}</dd>
-
-            <dt class="col-sm-3">Status:</dt> <br> <br>
-            <dd class="col-sm-9">{{ $requerimentos->status }}</dd>
-            <br>
-            <dt class="col-sm-3">Solicitado:</dt>
-            <dd class="col-sm-9">{{ \carbon\carbon::parse ($requerimentos->created_at)->format ('d/m/y h:i:s')}}.</dd>
-
-            <dt class="col-sm-3">Editado</dt>
-            <dd class="col-sm-9">{{ \carbon\carbon::parse ($requerimentos->updated_at)->format ('d/m/y h:i:s')}}.</dd>
+            <dt class="col-sm-3">Descrição:</dt>
+            <dd class="col-sm-9">{{ $requerimentos->descricao }} </dd>
         </dl>
+
     </div>
 
     @endsection

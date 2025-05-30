@@ -5,10 +5,7 @@
     <div class="card-header hstack gap-2">
         <h2>Bem vindo ao sistema {{ Auth::user()->name }}</h2>
         <span class="ms-auto">
-            <a href="{{ route('requerimentos.create')}}" class="btn btn-success btn-sm">Solicitar Requerimento</a>
-            <a href="{{ route('requerimentos.index') }}" class="btn btn-info btn-sm">Lista de Requerimentos</a>
             <a href="{{ route('permissions.index') }}" class="btn btn-info btn-sm">Permissoes</a> <!-- Botão para tela de requerimento -->
-            <a href="{{ route('courses.index') }}" class="btn btn-info btn-sm">Cursos</a>
         </span>
     </div>
 

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
+    
 
     //Listar Cursos
     public function index()
@@ -53,7 +54,7 @@ class CourseController extends Controller
             'description' => $request->description,
         ]);
         //redirecionar o usuario, enviar uma mensagem de sucesso
-        return redirect()->route('courses.show', ['course' => $course->id])->with('success', 'Curso cadastrado com sucesso!');
+        return redirect()->route('courses.index', ['course' => $course->id])->with('success', 'Curso cadastrado com sucesso!');
     }
 
     //editar um curso

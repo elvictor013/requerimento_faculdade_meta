@@ -8,6 +8,7 @@ use App\Http\Controllers\AtendimentoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RequerimentoController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\MoodleController;
 use App\Http\Controllers\PermissionController;
 
 // ==============================
@@ -50,6 +51,8 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/update-course/{course}', [CourseController::class, 'update'])->name('courses.update');
     Route::delete('/destroy-course/{course}', [CourseController::class, 'destroy'])->name('courses.destroy');
 
+
+
     // Disciplinas
     Route::get('/index-discipline/{course}', [DisciplineController::class, 'index'])->name('discipline.index');
     Route::get('/show-discipline/{discipline}', [DisciplineController::class, 'show'])->name('discipline.show');
@@ -80,11 +83,19 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/edit-requerimento/{requerimento}', [RequerimentoController::class, 'edit'])->name('requerimentos.edit');
     Route::put('/update-requerimento/{requerimento}', [RequerimentoController::class, 'update'])->name('requerimentos.update');
     Route::delete('/destroy-requerimento/{requerimento}', [RequerimentoController::class, 'destroy'])->name('requerimentos.destroy');
-    Route::get('/requerimentos/download/{id}', [RequerimentoController::class, 'download'])->name('requerimentos.download');    
+    Route::get('/requerimentos/download/{id}', [RequerimentoController::class, 'download'])->name('requerimentos.download');
     Route::get('/disciplinas-por-curso/{id}', [App\Http\Controllers\RequerimentoController::class, 'getDisciplinasPorCurso']);
+    Route::get('/moodle/cursos/{userid}', [RequerimentoController::class, 'getUserCourses']);
 
     // Permissões
     Route::get('/permissoes', [PermissionController::class, 'index'])->name('permissions.index');
     Route::post('/permissoes', [PermissionController::class, 'store'])->name('permissions.store');
     Route::delete('/permissoes/{id}', [PermissionController::class, 'destroy'])->name('permissions.destroy');
+
+
+    Route::get('/categorias', [MoodleController::class, 'getCategorias'])->name('categorias');
+    Route::get('/cursos/{userid}', [MoodleController::class, 'getUserCourses'])->name('user.courses');
+
+    Route::resource('requerimentos', RequerimentoController::class);
 });
+    

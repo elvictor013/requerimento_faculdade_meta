@@ -20,12 +20,12 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'username', 
+        'username',
+        'moodle_id',
         'name',
         'email',
-        'password','',
+        'password',
         'role',
-        'course',
     ];
 
     //criar relacionamento entre um e muitos
@@ -33,10 +33,23 @@ class User extends Authenticatable
     {
         return $this->hasMany(Requerimento::class);
     }
-    
+
     public function getAuthIdentifierName()
     {
         return 'username';
+    }
+
+// App\Models\User.php
+
+public function aluno()
+{
+    return $this->hasOne(Aluno::class, 'user_id');
+}
+
+
+    public function funcionario()
+    {
+        return $this->hasOne(Funcionario::class, 'user_id');
     }
 
 
