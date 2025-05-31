@@ -10,8 +10,7 @@ class Requerimento extends Model
     use HasFactory;
 
    protected $fillable = [
-    'user_id',
-    'matricula',
+    'aluno_id', 
     'category_id',
     'course_id',
     'tipo_requerimento',
@@ -27,5 +26,10 @@ class Requerimento extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function aluno()
+    {
+        return $this->belongsTo(Aluno::class);
     }
 }

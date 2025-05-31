@@ -9,6 +9,7 @@ class Aluno extends Model
 {
     use HasFactory;
 
+    protected $table = 'aluno'; // <- Define o nome da tabela no singular
     protected $fillable = [
         'user_id',
         'nome',
@@ -17,6 +18,12 @@ class Aluno extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class , 'user_id');
+        return $this->belongsTo(User::class);
     }
+
+    public function requerimentos()
+    {
+        return $this->hasMany(Requerimento::class);
+    }
+
 }

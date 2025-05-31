@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Aluno;
 use App\Models\Requerimento;
 use App\Models\Course;
 use App\Models\Discipline;
 use App\Models\MoodleUser;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -58,9 +60,18 @@ class RequerimentoController extends Controller
 
     public function show(Requerimento $requerimento)
     {
-        $requerimentos = $requerimento->load('disciplines');
-        return view('requerimentos.show', compact('requerimentos'));
+        // Verifica se o usuário logado é o dono do requerimento
+        if ($requerimento->user_id !== auth()->id()) {
+            abort(403, 'Você não tem permissão para visualizar este requerimento.');
+        }
+
+        // Carrega os relacionamentos se houver, exemplo: curso ou categoria
+        $requerimento->load('course', 'category');
+
+        // Retorna a view com os dados do requerimento
+        return view('requerimentos.show', compact('requerimento'));
     }
+
 
     public function create()
     {
@@ -121,25 +132,32 @@ class RequerimentoController extends Controller
     public function store(Request $request)
     {
         try {
+            // Validação dos campos
             $request->validate([
                 'category_id' => 'required|numeric',
                 'course_id' => 'required|numeric',
                 'tipo_requerimento' => 'required|string',
                 'descricao' => 'required|string',
                 'anexo' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:2048',
-                'protocolo' => 'nullable|string',
                 'status' => 'nullable|string',
             ]);
-            //  dd($request->all());
 
+            // Carrega o usuário autenticado com a relação aluno
+            $user = Aluno::with('aluno')->find(auth()->user()->id);
+
+            // Verifica se tem vínculo de aluno
+            if ($user->aluno === null) {
+                return back()->with('error', 'Seu perfil de aluno não está cadastrado. Por favor, entre em contato com a secretaria.');
+            }
+                dd($user);  
+            // Upload do anexo, se existir
             $anexoPath = $request->hasFile('anexo')
                 ? $request->file('anexo')->store('anexos', 'public')
                 : null;
-          
+
+            // Cria o requerimento
             $requerimento = Requerimento::create([
-            
-                'user_id' => auth()->user()->id,
-                'matricula' => auth()->user()->username, // matrícula = username
+                'aluno_id' => $user->aluno->id,
                 'category_id' => (int) $request->category_id,
                 'course_id' => (int) $request->course_id,
                 'tipo_requerimento' => $request->tipo_requerimento,
@@ -147,13 +165,13 @@ class RequerimentoController extends Controller
                 'anexo' => $anexoPath,
                 'status' => $request->status ?? 'Pendente',
             ]);
-                
-        
-            $protocolo = 'REQ-' . Carbon::now()->format('dmY') . '-' . str_pad($requerimento->id, 2, '0', STR_PAD_LEFT);
+                dd($requerimento);
+            // Geração do protocolo
+            $protocolo = 'REQ-' . now()->format('dmY') . '-' . str_pad($requerimento->id, 4, '0', STR_PAD_LEFT);
             $requerimento->update(['protocolo' => $protocolo]);
 
             return redirect()->route('requerimentos.index')
-                ->with('success', "Requerimento enviado com sucesso! Seu protocolo: $protocolo");
+                ->with('success', "Requerimento enviado com sucesso! Seu protocolo é: $protocolo");
         } catch (\Exception $e) {
             return back()->with('error', 'Erro ao salvar: ' . $e->getMessage());
         }

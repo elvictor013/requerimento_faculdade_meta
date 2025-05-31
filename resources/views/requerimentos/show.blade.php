@@ -1,53 +1,28 @@
 @extends('layouts.admin')
+
 @section('content')
+<div class="container">
+    <h1>Detalhes do Requerimento</h1>
 
-<div class="card mt-4 mb-4 border-light shadow">
+    <div class="card">
+        <div class="card-body">
+            <p><strong>Protocolo:</strong> {{ $requerimento->protocolo }}</p>
+            <p><strong>Tipo:</strong> {{ $requerimento->tipo_requerimento }}</p>
+            <p><strong>Descrição:</strong> {{ $requerimento->descricao }}</p>
+            <p><strong>Status:</strong> {{ $requerimento->status }}</p>
+            <p><strong>Curso:</strong> {{ $requerimento->course->name ?? 'Não informado' }}</p>
+            <p><strong>Data de Criação:</strong> {{ $requerimento->created_at->format('d/m/Y H:i') }}</p>
 
-    <div class="card-header hstack gap-2">
-        <span>Visualizar requerimento</span>
-        <span class="ms-auto d-sm-flex flex-row">
-            <a href="{{ route('requerimentos.index')}}" class="btn btn-info btn-sm me-1">lista de requeriemnto</a>
-        </span>
+            @if($requerimento->anexo)
+                <p><strong>Anexo:</strong> 
+                    <a href="{{ route('requerimentos.download', $requerimento->id) }}" target="_blank">
+                        Baixar Anexo
+                    </a>
+                </p>
+            @endif
+
+            <a href="{{ route('requerimentos.index') }}" class="btn btn-secondary">Voltar</a>
+        </div>
     </div>
-
-    <div class="card-body">
-        <x-alert />
-        <dl class="row">
-            <dt class="col-sm-3">Protocolo:</dt>
-            <dd class="col-sm-9">{{ $requerimentos->protocolo }} </dd>
-
-            <dt class="col-sm-3">Aluno:</dt>
-            <dd class="col-sm-9">{{ $requerimentos->user->name }} </dd>
-
-            <dt class="col-sm-3">Matricula:</dt>
-            <dd class="col-sm-9">{{ $requerimentos->matricula }} </dd>
-
-            <dt class="col-sm-3">Curso:</dt>
-            <dd class="col-sm-9">{{ $requerimentos->course->name }}</dd>
-
-            <dt class="col-sm-3">Tipo de Requerimento:</dt>
-            <dd class="col-sm-9">{{ $requerimentos->tipo_requerimento }}</dd>
-
-            <dt class="col-sm-3">status:</dt>
-            <dd class="col-sm-9">{{ $requerimentos->status}}</dd>
-
-            <dt class="col-sm-3">Disciplinas:</dt>
-            <dd class="col-sm-9">
-                @if($requerimentos->disciplines->isEmpty())
-                Nenhuma disciplina vinculada.
-                @else
-                <ul>
-                    @foreach($requerimentos->disciplines as $disciplina)
-                    <li>{{ $disciplina->name }}</li>
-                    @endforeach
-                </ul>
-                @endif
-            </dd>
-
-            <dt class="col-sm-3">Descrição:</dt>
-            <dd class="col-sm-9">{{ $requerimentos->descricao }} </dd>
-        </dl>
-
-    </div>
-
-    @endsection
+</div>
+@endsection

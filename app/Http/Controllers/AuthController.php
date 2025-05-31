@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\UserRequest;
+use App\Models\Aluno;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Models\MoodleUser;
@@ -29,7 +30,7 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        
+
 
         try {
             // Faz a requisição para o Moodle para obter o token
@@ -45,7 +46,7 @@ class AuthController extends Controller
 
 
             $token = $tokenResponse['token'];
-    
+
             // Usa o token para buscar informações do usuário via Webservice
             $userResponse = Http::get(env('MOODLE_REST_URL', 'http://localhost/moodle/webservice/rest/server.php'), [
                 'wstoken' => env('MOODLE_TOKEN', $token),
@@ -53,7 +54,7 @@ class AuthController extends Controller
                 'field' => 'username',
                 'values[0]' => $request->username,
                 'moodlewsrestformat' => 'json',
-                 
+
             ]);
 
             if ($userResponse->failed()) {
@@ -62,8 +63,8 @@ class AuthController extends Controller
 
             $moodleUser = $userResponse->json();
 
-            
-            
+
+
 
             // Cria ou atualiza o usuário local
             $user = User::updateOrCreate(
@@ -72,20 +73,26 @@ class AuthController extends Controller
                     'name' => $moodleUser[0]['fullname'],
                     'username' => $moodleUser[0]['username'],
                     'moodle_id' => $moodleUser[0]['id'],
-                    'email' => $moodleUser[0]['email'],// você pode adaptar conforme necessário
+                    'email' => $moodleUser[0]['email'], // você pode adaptar conforme necessário
                     'password' => bcrypt($request->password), // salva a senha localmente criptografada (opcional)
-                    'role' => 'webservice',
+                    'role' => 'aluno',
                 ]
             );
-           
+
+            Aluno::firstOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'nome' => $user->name,
+                    'matricula' => $user->username,
+                ]
+            );
 
             // Autentica localmente
             Auth::login($user);
 
             return redirect()->route('requerimentos.index')->with('success', 'Logado com sucesso!');
-
         } catch (\Exception $e) {
-            
+
             return redirect()->back()->with('error', 'Erro ao autenticar no Moodle');
         }
     }
@@ -94,5 +101,4 @@ class AuthController extends Controller
         Auth::logout();
         return redirect()->route('login')->with('success', 'Deslogado com sucesso!');
     }
-
 }
