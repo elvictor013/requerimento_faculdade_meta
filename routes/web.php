@@ -62,7 +62,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/update-discipline/{discipline}', [DisciplineController::class, 'update'])->name('discipline.update');
     Route::delete('/destroy-discipline/{discipline}', [DisciplineController::class, 'destroy'])->name('discipline.destroy');
     Route::get('/disciplinas/{curso_id}', function ($curso_id) {
-        return \App\Models\Discipline::where('course_id', $curso_id)->get(['id', 'nome']);
+        // return \App\Models\Discipline::where('course_id', $curso_id)->get(['id', 'nome']);
     });
 
 

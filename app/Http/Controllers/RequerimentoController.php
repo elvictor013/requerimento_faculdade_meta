@@ -121,7 +121,7 @@ class RequerimentoController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validated([
+            $request->validate([
                 'category_id' => 'required|numeric',
                 'course_id' => 'required|numeric',
                 'tipo_requerimento' => 'required|string',
@@ -138,7 +138,7 @@ class RequerimentoController extends Controller
           
             $requerimento = Requerimento::create([
             
-                'user_id' => auth()->id(),
+                'user_id' => auth()->user()->id,
                 'matricula' => auth()->user()->username, // matrícula = username
                 'category_id' => (int) $request->category_id,
                 'course_id' => (int) $request->course_id,
@@ -147,7 +147,7 @@ class RequerimentoController extends Controller
                 'anexo' => $anexoPath,
                 'status' => $request->status ?? 'Pendente',
             ]);
-                dd($requerimento);
+                
         
             $protocolo = 'REQ-' . Carbon::now()->format('dmY') . '-' . str_pad($requerimento->id, 2, '0', STR_PAD_LEFT);
             $requerimento->update(['protocolo' => $protocolo]);
