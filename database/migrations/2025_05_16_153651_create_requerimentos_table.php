@@ -9,7 +9,9 @@ return new class extends Migration {
     {
         Schema::create('requerimentos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('aluno_id'); // Cria a coluna
+            $table->unsignedBigInteger('aluno_id');
+            $table->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('course_id');
             $table->string('tipo_requerimento');
             $table->text('descricao');
             $table->string('anexo')->nullable();
@@ -17,11 +19,9 @@ return new class extends Migration {
             $table->string('protocolo')->unique()->nullable();
             $table->timestamps();
 
-            // Chave estrangeira apontando para alunos
             $table->foreign('aluno_id')->references('id')->on('aluno')->onDelete('cascade');
         });
     }
-
     public function down()
     {
         Schema::dropIfExists('requerimentos');

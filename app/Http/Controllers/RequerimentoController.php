@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Aluno;
 use App\Models\Requerimento;
 use App\Models\Course;
 use App\Models\Discipline;
@@ -60,18 +59,9 @@ class RequerimentoController extends Controller
 
     public function show(Requerimento $requerimento)
     {
-        // Verifica se o usuário logado é o dono do requerimento
-        if ($requerimento->user_id !== auth()->id()) {
-            abort(403, 'Você não tem permissão para visualizar este requerimento.');
-        }
-
-        // Carrega os relacionamentos se houver, exemplo: curso ou categoria
-        $requerimento->load('course', 'category');
-
-        // Retorna a view com os dados do requerimento
-        return view('requerimentos.show', compact('requerimento'));
+        $requerimentos = $requerimento->load('aluno');
+        return view('requerimentos.show', compact('requerimentos'));
     }
-
 
     public function create()
     {
@@ -84,9 +74,6 @@ class RequerimentoController extends Controller
         // Pega o token e a URL da API do Moodle do .env
         $token = env('MOODLE_TOKEN');
         $url = env('MOODLE_REST_URL');
-
-
-
 
         // Verifica se as variáveis estão corretas
         if (!$url || !$token) {
@@ -132,32 +119,24 @@ class RequerimentoController extends Controller
     public function store(Request $request)
     {
         try {
-            // Validação dos campos
             $request->validate([
                 'category_id' => 'required|numeric',
                 'course_id' => 'required|numeric',
                 'tipo_requerimento' => 'required|string',
                 'descricao' => 'required|string',
                 'anexo' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:2048',
+                'protocolo' => 'nullable|string',
                 'status' => 'nullable|string',
             ]);
 
-            // Carrega o usuário autenticado com a relação aluno
-            $user = Aluno::with('aluno')->find(auth()->user()->id);
+            $user = User::with('aluno')->find(auth()->user()->id);
 
-            // Verifica se tem vínculo de aluno
-            if ($user->aluno === null) {
-                return back()->with('error', 'Seu perfil de aluno não está cadastrado. Por favor, entre em contato com a secretaria.');
-            }
-                dd($user);  
-            // Upload do anexo, se existir
             $anexoPath = $request->hasFile('anexo')
                 ? $request->file('anexo')->store('anexos', 'public')
                 : null;
 
-            // Cria o requerimento
             $requerimento = Requerimento::create([
-                'aluno_id' => $user->aluno->id,
+                'aluno_id'    => $user->aluno->id,
                 'category_id' => (int) $request->category_id,
                 'course_id' => (int) $request->course_id,
                 'tipo_requerimento' => $request->tipo_requerimento,
@@ -165,15 +144,22 @@ class RequerimentoController extends Controller
                 'anexo' => $anexoPath,
                 'status' => $request->status ?? 'Pendente',
             ]);
-                dd($requerimento);
-            // Geração do protocolo
-            $protocolo = 'REQ-' . now()->format('dmY') . '-' . str_pad($requerimento->id, 4, '0', STR_PAD_LEFT);
-            $requerimento->update(['protocolo' => $protocolo]);
+            // return response()->json([
+            //     'user'  => $request->category_id
+            // ]);
 
+            $protocolo = 'REQ-' . Carbon::now()->format('dmY') . '-' . str_pad($requerimento->id, 2, '0', STR_PAD_LEFT);
+            $requerimento->update(['protocolo' => $protocolo]);
+            // return response()->json([
+            //     'requerimento'  => $requerimento
+            // ]);
             return redirect()->route('requerimentos.index')
-                ->with('success', "Requerimento enviado com sucesso! Seu protocolo é: $protocolo");
+                ->with('success', "Requerimento enviado com sucesso! Seu protocolo: $protocolo");
         } catch (\Exception $e) {
-            return back()->with('error', 'Erro ao salvar: ' . $e->getMessage());
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+            // return back()->with('error', 'Erro ao salvar: ' . $e->getMessage());}
         }
     }
 }

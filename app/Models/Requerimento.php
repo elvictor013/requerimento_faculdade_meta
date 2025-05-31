@@ -23,10 +23,7 @@ class Requerimento extends Model
 
 
     //criar relacionamento entre um e muitos
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+  
 
     public function aluno()
     {

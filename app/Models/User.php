@@ -43,7 +43,7 @@ class User extends Authenticatable
 
 public function aluno()
 {
-    return $this->hasOne(Aluno::class,);
+    return $this->hasOne(Aluno::class);
 }
 
 
