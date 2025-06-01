@@ -14,8 +14,10 @@ class Funcionario extends Model
     protected $fillable = [
         'user_id',
         'name',
-        'cpf',
-        'tipo_funcionario',
+        'email',
+        'username',
+        'role',
+        'setor',
     ];
 
     public function user()

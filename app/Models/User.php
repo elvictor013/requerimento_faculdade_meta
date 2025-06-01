@@ -39,17 +39,26 @@ class User extends Authenticatable
         return 'username';
     }
 
-// App\Models\User.php
+    // App\Models\User.php
 
-public function aluno()
-{
-    return $this->hasOne(Aluno::class);
-}
-
+    public function aluno()
+    {
+        return $this->hasOne(Aluno::class);
+    }
 
     public function funcionario()
     {
-        return $this->hasOne(Funcionario::class, 'user_id');
+        return $this->hasOne(Funcionario::class);
+    }
+
+    public function movimentacoesEnviadas()
+    {
+        return $this->hasMany(Movimentacao::class, 'enviado_por');
+    }
+
+    public function movimentacoesRecebidas()
+    {
+        return $this->hasMany(Movimentacao::class, 'recebido_por');
     }
 
 

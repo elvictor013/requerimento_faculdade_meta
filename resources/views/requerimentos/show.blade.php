@@ -7,10 +7,13 @@
     <div class="card">
         <div class="card-body">
             <p><strong>Protocolo:</strong> {{ $requerimento->protocolo }}</p>
+            <p><strong>Aluno:</strong> {{ $requerimento->aluno->nome}}</p>
+            <p><strong>Matricula:</strong> {{ $requerimento->aluno->matricula }}</p>
             <p><strong>Tipo:</strong> {{ $requerimento->tipo_requerimento }}</p>
             <p><strong>Descrição:</strong> {{ $requerimento->descricao }}</p>
             <p><strong>Status:</strong> {{ $requerimento->status }}</p>
-            <p><strong>Curso:</strong> {{ $requerimento->course->name ?? 'Não informado' }}</p>
+            <p><strong>Curso:</strong> {{ $requerimento->category_id }}</p>
+            <p><strong>Semestre:</strong> {{ $requerimento->semestre }}</p> 
             <p><strong>Data de Criação:</strong> {{ $requerimento->created_at->format('d/m/Y H:i') }}</p>
 
             @if($requerimento->anexo)

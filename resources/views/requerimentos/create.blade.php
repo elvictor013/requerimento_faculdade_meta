@@ -19,7 +19,7 @@
 
         <!-- Categoria -->
         <div class="mb-3">
-            <label class="form-label fw-semibold" for="category_id">Categoria</label>
+            <label class="form-label fw-semibold" for="category_id">Curso</label>
             <select class="form-select" id="category_id" name="category_id">
                 <option value="" disabled selected>Selecione uma categoria</option>
                 @foreach($categories as $category)
@@ -31,26 +31,26 @@
 
         <!-- Semestre -->
 
-        <!-- <div class="mb-3">
-            <label class="form-label fw-semibold" for="semestre_id">Semestre</label>
-            <select class="form-select" id="semestre_id" name="semestre_id" required>
+        <div class="mb-3">
+            <label class="form-label fw-semibold" for="semestre">Semestre</label>
+            <select class="form-select" id="semestre" name="semestre" required>
                 <option value="" disabled selected>Selecione um semestre</option>
-                <option value="1">Semestre 1</option>
-                <option value="2">Semestre 2</option>
-                <option value="3">Semestre 3</option>
-                <option value="4">Semestre 4</option>
-                <option value="5">Semestre 5</option>
-                <option value="6">Semestre 6</option>
-                <option value="7">Semestre 7</option>
-                <option value="8">Semestre 8</option>
-                <option value="9">Semestre 9</option>
-                <option value="10">Semestre 10</option>
+                <option value="1"> 1º Semestre</option>
+                <option value="2"> 2º Semestre</option>
+                <option value="3"> 3º Semestre</option>
+                <option value="4"> 4º Semestre</option>
+                <option value="5"> 5º Semestre</option>
+                <option value="6"> 6º Semestre</option>
+                <option value="7"> 7º Semestre</option>
+                <option value="8"> 8º Semestre</option>
+                <option value="9"> 9º Semestre</option>
+                <option value="10">10º Semestre</option>
             </select>
-        </div> -->
+        </div>
 
         <!-- Curso -->
         <div class="mb-3">
-            <label class="form-label fw-semibold" for="course_id">curso</label>
+            <label class="form-label fw-semibold" for="course_id">Disciplina</label>
             <select class="form-select" id="course_id" name="course_id" required>
                 <option value="" disabled selected>Selecione um curso</option>
                 @foreach($courses as $course)

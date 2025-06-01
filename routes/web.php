@@ -67,13 +67,13 @@ Route::middleware(['auth'])->group(function () {
 
 
     // Atendimentos
-    Route::get('/index-atendimento', [AtendimentoController::class, 'index'])->name('atendimentos.index');
-    Route::get('/show-atendimento/{atendimento}', [AtendimentoController::class, 'show'])->name('atendimentos.show');
-    Route::get('/create-atendimento', [AtendimentoController::class, 'create'])->name('atendimentos.create');
-    Route::post('/store-atendimento', [AtendimentoController::class, 'store'])->name('atendimentos.store');
-    Route::get('/edit-atendimento/{atendimento}', [AtendimentoController::class, 'edit'])->name('atendimentos.edit');
-    Route::put('/update-atendimento/{atendimento}', [AtendimentoController::class, 'update'])->name('atendimentos.update');
-    Route::delete('/destroy-atendimento/{atendimento}', [AtendimentoController::class, 'destroy'])->name('atendimentos.destroy');
+    Route::get('/index-atendimento', [AtendimentoController::class, 'index'])->name('atendimento.index');
+    Route::get('/show-atendimento/{atendimento}', [AtendimentoController::class, 'show'])->name('atendimento.show');
+    Route::get('/create-atendimento', [AtendimentoController::class, 'create'])->name('atendimento.create');
+    Route::post('/store-atendimento', [AtendimentoController::class, 'store'])->name('atendimento.store');
+    Route::get('/edit-atendimento/{atendimento}', [AtendimentoController::class, 'edit'])->name('atendimento.edit');
+    Route::put('/update-atendimento/{atendimento}', [AtendimentoController::class, 'update'])->name('atendimento.update');
+    Route::delete('/destroy-atendimento/{atendimento}', [AtendimentoController::class, 'destroy'])->name('atendimento.destroy');
 
     // Requerimentos
     Route::get('/requerimentos', [RequerimentoController::class, 'index'])->name('requerimentos.index');

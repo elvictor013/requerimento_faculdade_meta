@@ -1,16 +1,21 @@
-@extends ('layouts.admin')
-
+@extends('layouts.admin')
 @section('content')
-<div class="card-header" >
-    <h2>tela do atendente</h2>
-</div>
+<div class="card mt-4 mb-4 border-light shadow">
 
+    <div class="card-header hstack gap-2">
+        <h2>Bem vindo ao sistema {{ Auth::user()->name }}</h2>
+        <span class="ms-auto">
+            <a href="{{ route('permissions.index') }}" class="btn btn-info btn-sm">Permissoes</a> <!-- Botão para tela de requerimento -->
+            <!-- cadastrar um novo atendente -->
+            <a href="{{ route('atendimento.create') }}" class="btn btn-primary btn-sm">Cadastrar novo atendente</a>
+        </span>
+    </div>
 
-<div class="card-body">
+    <div class="card-body">
         <x-alert />
         <table class="table">
             <thead>
-                <tr>
+                <tr>    
                     <th scope="col">ID</th>
                     <th scope="col">Nome</th>
                     <th scope="col">Email</th>
@@ -19,31 +24,25 @@
             </thead>
             <tbody>
 
-                @forelse ($users as $user)
+                @forelse ($funcionarios as $funcionario)
 
                 <tr>
-                    <th> {{ $user->id }}</th>
-                    <td>{{ $user->name }}</td>
-                    <td>{{ $user->email }}</td>
+                    <th> {{ $funcionario->id }}</th>
+                    <td>{{ $funcionario->name }}</td>
+                    <td>{{ $funcionario->email }}</td>
                     <td class="text-center">
-                        <a href="{{ route('user.show', ['user' => $user->id]) }}" class="btn btn-primary btn-sm">Visualizar</a>
-                        <a href="{{ route('user.edit', ['user' => $user->id]) }}" class="btn btn-warning btn-sm">Editar</a>
-                        <form method="POST" action="{{ route('user.destroy' , ['user' => $user->id]) }}" class="d-inline">
-                            @csrf
-                            @method('delete')
-                            <button type="submit" class="btn btn-danger btn-sm " onclick="return confirm('Tem certeza que deseja apagar esse registro?')">Apagar</button>
-                        </form>
+                        
                     </td>
                 </tr>
 
                 @empty
                 <div class="alert alert-danger" role="alert">
-                    Nenhum usuário encontrado
+                    Nenhum usuário atendente encontrado
                 </div>
                 @endforelse
             </tbody>
         </table>
-        {{ $users->links() }}
+        {{ $funcionarios->links() }}
     </div>
 </div>
 @endsection

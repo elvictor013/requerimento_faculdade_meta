@@ -38,7 +38,16 @@ class RequerimentoController extends Controller
 
     public function index(Request $request)
     {
+        $user = User::with('aluno')->find(auth()->user()->id);
+
+        if (!$user || !$user->aluno) {
+            return back()->with('error', 'Aluno não encontrado para este usuário.');
+        }
+
+        $alunoId = $user->aluno->id;
+
         $requerimentos = Requerimento::query()
+            ->where('aluno_id', $alunoId)
             ->when($request->tipo, fn($query, $tipo) => $query->where('tipo_requerimento', $tipo))
             ->when($request->status, fn($query, $status) => $query->where('status', $status))
             ->when($request->busca, function ($query, $busca) {
@@ -59,8 +68,9 @@ class RequerimentoController extends Controller
 
     public function show(Requerimento $requerimento)
     {
-        $requerimentos = $requerimento->load('aluno');
-        return view('requerimentos.show', compact('requerimentos'));
+        $requerimento = $requerimento->load('aluno');
+
+        return view('requerimentos.show', ['requerimento' => $requerimento]);
     }
 
     public function create()
@@ -100,10 +110,9 @@ class RequerimentoController extends Controller
         $paramsCategories = [
             'wstoken' => $token,
             'wsfunction' => 'core_course_get_categories',
-            //LINHA 105 //     'categoryid' => $moodleid,
             'moodlewsrestformat' => 'json',
         ];
-
+      
         $responseCategories = Http::get($url, $paramsCategories);
 
         if ($responseCategories->failed()) {
@@ -121,6 +130,7 @@ class RequerimentoController extends Controller
         try {
             $request->validate([
                 'category_id' => 'required|numeric',
+                'semestre' => 'required|string',
                 'course_id' => 'required|numeric',
                 'tipo_requerimento' => 'required|string',
                 'descricao' => 'required|string',
@@ -138,6 +148,7 @@ class RequerimentoController extends Controller
             $requerimento = Requerimento::create([
                 'aluno_id'    => $user->aluno->id,
                 'category_id' => (int) $request->category_id,
+                'semestre' => $request->semestre,
                 'course_id' => (int) $request->course_id,
                 'tipo_requerimento' => $request->tipo_requerimento,
                 'descricao' => $request->descricao,
