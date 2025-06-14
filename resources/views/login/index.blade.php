@@ -17,14 +17,15 @@
         @method('POST')
 
         <div class="form-floating mb-4">
-            <input type="text" name="username" required class="form-control" id="username" placeholder="Digite sua matrícula válida" value="{{ old('username') }}">
-            <label for="username">Matrícula</label>
+            <input type="text" name="username" required class="form-control" id="username" placeholder="Digite sua matrícula válida"
+                value="{{ old('username', Cookie::get('remembered_username')) }}">
+            <label for="username">Identificação ou matrícula</label>
         </div>
 
         <div class="mb-4">
             <div class="input-group">
                 <div class="form-floating">
-                    <input type="password" name="password" class="form-control" id="password" placeholder="Senha" value="">
+                    <input type="password" name="password" class="form-control" id="password" placeholder="Senha">
                     <label for="password">Senha</label>
                 </div>
                 <span class="input-group-text" role="button" onclick="togglePassword('password', this)">
@@ -33,12 +34,13 @@
             </div>
         </div>
 
+
         <button type="submit" class="btn btn-primary btn-primary-custom w-100 mb-3">
             Acessar
         </button>
 
         <div class="text-center mb-3">
-            <a href="{{ route('password.request') }}" class="text-primary-custom text-decoration-none">Perdeu a senha?</a>
+            <a href="https://ava.meta.edu.br/faculdade/login/forgot_password.php" class="text-primary-custom text-decoration-none">Perdeu a senha?</a>
         </div>
 
         <div class="d-flex justify-content-end align-items-center text-primary-custom small">
@@ -53,15 +55,16 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="cookieModalLabel">Aviso de Cookies</h5>
+                <h5 class="modal-title" id="cookieModalLabel"><b>O uso de Cookies deve ser permitido no seu navegador</b></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body">
-                <p>Este site utiliza cookies para melhorar a experiência do usuário, personalizar conteúdo e anúncios, fornecer recursos de mídia social e analisar nosso tráfego. Ao continuar navegando, você concorda com o uso de cookies.</p>
-                <p>Para mais informações, consulte nossa <a href="#" class="text-primary">Política de Privacidade</a>.</p>
+                <p>Dois cookies são utilizados neste site:</p>
+                <p>O cookie essencial é o cookie de sessão, geralmente chamado MoodleSession. Você deve permitir este cookie no seu navegador para ter continuidade e permanecer logado enquanto navega pelo site. Quando você sai ou fecha o navegador este cookie é destruído (no seu navegador e no servidor).</p>
+                <p>O outro cookie é apenas para sua conveniência, geralmente chamado de algo como MOODLEID. Ele apenas lembra sua identificação no navegador. Isso significa que quando você retornar a este site, o campo de identificação do usuário na página de autenticação será automaticamente preenchido para você. É seguro recusar este cookie - você apenas terá que redigitar a sua identificação toda vez que você autenticar.</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
             </div>
         </div>
     </div>

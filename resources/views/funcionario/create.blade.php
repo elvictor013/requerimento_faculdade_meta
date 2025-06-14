@@ -6,14 +6,14 @@
     <div class="card-header hstack gap-2">
         <span>Cadastrar Funcionario</span>
         <span class="ms-auto d-sm-flex flex-row">
-            <a href="{{ route('atendimento.index')}}" class="btn btn-info btn-sm me-1">Tela Inicial</a>
+            <a href="{{ route('funcionario.index')}}" class="btn btn-info btn-sm me-1">Tela Inicial</a>
         </span>
     </div>
 
     <div class="card-body">
         <x-alert />
 
-        <form action="{{ route('atendimento.store') }}" method="POST" class="row g-3">
+        <form action="{{ route('funcionario.store') }}" method="POST" class="row g-3">
             @csrf
             @method('POST')
 
@@ -31,16 +31,17 @@
 
             <div class="col-md-12">
                 <label for="cpf" class="form-label">CPF:</label>
-                <input type="text" name="username" class="form-control" id="username" placeholder="00000000000" value="{{ old('username') }}">
+                <input type="text" name="cpf" class="form-control" id="cpf" placeholder="00000000000" value="{{ old('cpf') }}">
 
             </div>
 
             <!-- tipo de funcionario -->
 
             <div class="col-md-12">
-                <label class="form-label" for="role">Função do Funcionário</label>
-                <select class="form-select" id="role" name="role" required>
+                <label class="form-label" for="tipo_funcionario">Tipo do Funcionário</label>
+                <select class="form-select" id="tipo_funcionario" name="tipo_funcionario" required>
                     <option value="" disabled selected>Selecione um papel</option>
+                    <option value="coordenador">Funcionario</option>
                     <option value="admin">Administrador</option>
                     <option value="atendente">Atendente</option>
                     <option value="professor">Professor</option>
@@ -57,20 +58,16 @@
 
             <!-- setor do funcionario -->
 
-            <div class="col-md-12">
-                <label class="form-label" for="setor">Setor</label>
-                <select class="form-select" id="setor" name="setor" required>
-                    <option value="" disabled selected>Selecione um setor</option>
-                    <option value="atendimento">Atendimento</option>
-                    <option value="pedagogico">Pedagógico</option>
-                    <option value="gerente academico">Gerente academico</option>
-                    <option value="pedagogico">Vice-direção/direção acadêmica</option>
-                    <option value="atendimento">Financeiro</option>
-                    <option value="coordenação de curso">Coordenação de curso</option>
-                    <option value="secretaria">Secretaria</option>
-                    <option value="coordenacao de estagio">Coordenacao de estagio</option>
+            <div class="mb-3">
+                <label class="form-label fw-semibold" for="setor_id">Setor</label>
+                <select class="form-select" id="setor_id" name="setor_id" required>
+                    <option value="" disabled selected>Selecione o setor</option>
+                    @foreach($setores as $setor)
+                    <option value="{{ $setor['id'] }}">{{ $setor['descricao'] }}</option>
+                    @endforeach
                 </select>
             </div>
+
 
             <div class="col-md-6">
                 <label for="password" class="form-label">Senha:</label>
@@ -89,7 +86,7 @@
             </div>
 
             <div class="col-12">
-                <button type="submit" class="btn btn-success btn-sm">Cadastrar</button>
+                <button type="submit" class="btn btn-sm btn-primary">Cadastrar</button>
             </div>
         </form>
     </div>

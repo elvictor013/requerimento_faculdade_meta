@@ -2,54 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\FuncionarioRequest;
-use App\Models\Funcionario;
+use App\Models\Requerimento;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class AtendimentoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $funcionarios = Funcionario::orderByDesc('id')->paginate(2);
+        $user = User::with('funcionario')->find(auth()->user()->id);
 
+        if (!$user || !$user->funcionario) {
+            return back()->with('error', 'Funcionário não encontrado para este usuário.');
+        }
 
+        $requerimentos = Requerimento::with(['aluno.user']) // carrega nome do solicitante
+            ->when($request->tipo, fn($query, $tipo) => $query->where('tipo_requerimento', $tipo))
+            ->when($request->status, fn($query, $status) => $query->where('status', $status))
+            ->when($request->busca, function ($query, $busca) {
+                $query->where(function ($q) use ($busca) {
+                    $q->where('tipo_requerimento', 'like', "%$busca%")
+                        ->orWhere('protocolo', 'like', "%$busca%");
+                });
+            })
+            ->when(
+                $request->ordenacao,
+                fn($query, $ordenacao) => $query->orderBy('created_at', $ordenacao),
+                fn($query) => $query->orderBy('created_at', 'desc')
+            )
+            ->paginate(10);
 
-        return view('atendimento.index', ['funcionarios' => $funcionarios]);
-    }
-
-    public function show()
-    {
-        return view('atendimento.show');
-    }
-
-    public function create()
-    {
-        return view('atendimento.create');
-    }
-
-    public function store(FuncionarioRequest $request)
-    {
-        $request->validated();
-
-       $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'username' => $request->username,
-            'role' => $request->role,
-            'password' => bcrypt($request->password),
-        ]);
-
-        Funcionario::create([
-            'user_id' => $user->id,
-            'name' => $request->name,
-            'email' => $request->email, 
-            'username' => $request->username,
-            'role' => $request->role,
-            'setor' => $request->setor,
-        ]);
-
-        return redirect()->route('atendimento.index')->with('success', 'Usuário atendente cadastrado com sucesso!');
+        return view('atendimento.index', compact('requerimentos'));
     }
 }

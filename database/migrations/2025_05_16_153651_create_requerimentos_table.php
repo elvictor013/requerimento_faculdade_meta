@@ -12,6 +12,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('aluno_id');
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('course_id');
+            $table->string('semestre');
             $table->string('tipo_requerimento');
             $table->text('descricao');
             $table->string('anexo')->nullable();

@@ -6,7 +6,7 @@ use App\Http\Requests\CourseRequest;
 use App\Models\Course;
 use App\Models\Discipline;
 use Exception;
-use Illuminate\Http\Request;
+            use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
@@ -37,7 +37,7 @@ class CourseController extends Controller
     //cadastrar um curso
     public function create()
     {   // carregar a view
-        return view('courses.create');
+        return view('courses.crea       te');
     }
 
     //cadastrar um curso
@@ -45,16 +45,16 @@ class CourseController extends Controller
     {   
         //validadar o formulário
         $request->validated([
-            'name' => 'required ',
+            'name' => 'required|unique:courses,name',
             'description' => 'required',
         ]);
         // cadastrar no banco de dados 
         $course = Course::create([
             'name' => $request->name,
             'description' => $request->description,
-        ]);
+        ]); 
         //redirecionar o usuario, enviar uma mensagem de sucesso
-        return redirect()->route('courses.index', ['course' => $course->id])->with('success', 'Curso cadastrado com sucesso!');
+        return redirect(->route('courses.index', ['course' => $course->id])->with('success', 'Curso cadastrado com sucesso!');
     }
 
     //editar um curso

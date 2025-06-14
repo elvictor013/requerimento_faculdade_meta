@@ -9,7 +9,17 @@ class Setor extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['descricao'];
+    protected $table = 'setor';
+
+    protected $fillable = [
+        'nome',
+        'descricao',
+    ];
+
+    public function funcioanarios()
+    {
+        return $this->hasMany(Funcionario::class);
+    }
 
     public function movimentacoesOrigem()
     {

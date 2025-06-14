@@ -9,21 +9,25 @@ class Requerimento extends Model
 {
     use HasFactory;
 
-   protected $fillable = [
-    'aluno_id', 
-    'category_id',
-    'course_id',
-    'tipo_requerimento',
-    'descricao',
-    'anexo',
-    'status',
-    'protocolo',
-];
+    protected $table = 'requerimentos';
 
+    protected $fillable = [
+        'aluno_id',
+        'category_id',
+        'course_id',
+        'semestre',
+        'tipo_requerimento',
+        'descricao',
+        'anexo',
+        'status',
+        'protocolo',
+    ];
 
+    public function movimentacoes()
+    {
+        return $this->hasMany(Movimentacao::class);
+    }
 
-    //criar relacionamento entre um e muitos
-  
 
     public function aluno()
     {

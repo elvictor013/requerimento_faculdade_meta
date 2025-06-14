@@ -118,8 +118,21 @@
             <a class="nav-link" href="{{ route('requerimentos.index') }}">Página requerimentos</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ route('courses.index') }}"></a>
+            <a class="nav-link" href="{{ route('funcionario.index') }}">Funcionario</a>
           </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('setores.index') }}">Setores</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('movimentacoes.index') }}">Movimentações</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('user.index') }}">Usuarios</a>
+          </li>
+
           <li class="nav-item">
             <a class="nav-link" href="https://dliportal.zbra.com.br/Login.aspx?key=meta">Biblioteca Virtual</a>
           </li>
@@ -129,37 +142,8 @@
         </ul>
       </div>
       <div class="d-flex align-items-center gap-3 position-relative">
-        <!-- Notificações Dropdown -->
-        <div class="dropdown">
-          <button aria-expanded="false" aria-haspopup="true" aria-label="Notificações" class="btn position-relative p-0 text-secondary" data-bs-toggle="dropdown" id="notificacoesDropdown" type="button">
-            <i class="far fa-bell fa-lg"></i>
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">1</span>
-          </button>
-          <ul aria-labelledby="notificacoesDropdown" class="dropdown-menu dropdown-menu-end shadow" style="min-width: 250px;">
-            <li>
-              <h6 class="dropdown-header">Notificações</h6>
-            </li>
-            <li>
-              <a class="dropdown-item small" href="#">Você tem 1 nova notificação.</a>
-            </li>
-            <li>
-              <hr class="dropdown-divider" />
-            </li>
-            <li>
-              <a class="dropdown-item small text-center" href="#">Ver todas</a>
-            </li>
-          </ul>
-        </div>
-        <!-- Mensagens Button -->
-        <button aria-label="Mensagens" class="btn p-0 text-secondary" type="button">
-          <i class="far fa-comment-alt fa-lg"></i>
-        </button>
         <!-- Perfil Dropdown -->
         <div class="dropdown d-flex align-items-center">
-          <button aria-expanded="false" aria-haspopup="true" aria-label="Perfil do usuário" class="btn p-0 rounded-circle overflow-hidden" data-bs-toggle="dropdown" id="perfilDropdown" style="width: 40px; height: 40px;" type="button">
-            <img alt="Foto do perfil do usuário, mulher loira sorrindo com fundo azul" class="w-100 h-100 object-fit-cover" src="https://storage.googleapis.com/a1aa/image/fe84ebd5-b86a-4513-1125-a28c0c30c7c2.jpg" />
-            <span class="position-absolute bottom-0 end-0 bg-white rounded-circle border border-secondary" style="width: 12px; height: 12px;"></span>
-          </button>
           <button aria-label="Menu de usuário" class="btn p-0 text-secondary ms-1" data-bs-toggle="dropdown" id="perfilMenuToggle" type="button">
             <i class="fas fa-chevron-down"></i>
           </button>
@@ -181,6 +165,9 @@
       </div>
     </div>
   </nav>
+
+  
+
   <div class="container">
     @yield('content')
   </div>

@@ -35,8 +35,8 @@ class LoginRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'username.required' => 'O campo matrícula de usuário é obrigatório!',
-            'username.numeric' => 'O campo matrícula de usuário deve ser numérico!',
+            'username.required' => 'O campo identificação de usuário é obrigatório!',
+            'username.numeric' => 'O campo identificação de usuário deve ser numérico!',
             'password.required' => 'O campo senha é obrigatório!',
         ];
     }

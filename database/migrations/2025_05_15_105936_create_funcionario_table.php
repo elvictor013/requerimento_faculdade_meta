@@ -14,13 +14,10 @@ return new class extends Migration
         Schema::create('funcionario', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->unique();
-            $table->string('name');
-            $table->string('username')->unique();
-            $table->string('email')->unique();
-            $table->string('role')->nullable();
-            $table->string('setor')->nullable();
+            $table->string('cpf')->unique();
+            $table->string('tipo_funcionario')->nullable();
+            $table->unsignedBigInteger('setor_id');
             $table->timestamps();
-
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }

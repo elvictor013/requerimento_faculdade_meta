@@ -15,9 +15,10 @@ return new class extends Migration {
             $table->unsignedBigInteger('moodle_id')->nullable();
             $table->string('username')->unique()->nullable(); // Adiciona username aqui já na criação
             $table->string('name');
-            $table->string('email')->unique()->nullable();
+            $table->string('cpf')->unique()->nullable();
+            $table->string('email')->unique();
             $table->string('role')->nullable();
-            $table->string('setor')->nullable();
+            $table->string('setor_id')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

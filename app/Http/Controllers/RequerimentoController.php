@@ -6,6 +6,7 @@ use App\Models\Requerimento;
 use App\Models\Course;
 use App\Models\Discipline;
 use App\Models\MoodleUser;
+use App\Models\Movimentacao;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -155,6 +156,17 @@ class RequerimentoController extends Controller
                 'anexo' => $anexoPath,
                 'status' => $request->status ?? 'Pendente',
             ]);
+
+            Movimentacao::create([
+                'requerimento_id' => $requerimento->id,
+                'setor_origem_id' => 1,
+                'setor_destino_id' => 1,
+                'enviado_por' => auth()->user()->id,
+                'data_hora_enviado' => now(),
+                'status' => 'Enviado',
+            ]);
+
+
             // return response()->json([
             //     'user'  => $request->category_id
             // ]);

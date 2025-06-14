@@ -9,6 +9,8 @@ class SituacaoMovimentacao extends Model
 {
     use HasFactory;
 
+    protected $table = 'situacao_movimentacao';
+
     protected $fillable = ['descricao'];
 
     public function movimentacoes()

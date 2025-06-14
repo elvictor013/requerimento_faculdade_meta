@@ -8,8 +8,12 @@ use App\Http\Controllers\AtendimentoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RequerimentoController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\FuncionarioController;
 use App\Http\Controllers\MoodleController;
+use App\Http\Controllers\MovimentacaoController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\SetorController;
+use App\Models\Funcionario;
 
 // ==============================
 // ROTAS PÚBLICAS (sem auth)
@@ -65,15 +69,15 @@ Route::middleware(['auth'])->group(function () {
         // return \App\Models\Discipline::where('course_id', $curso_id)->get(['id', 'nome']);
     });
 
-
-    // Atendimentos
-    Route::get('/index-atendimento', [AtendimentoController::class, 'index'])->name('atendimento.index');
-    Route::get('/show-atendimento/{atendimento}', [AtendimentoController::class, 'show'])->name('atendimento.show');
-    Route::get('/create-atendimento', [AtendimentoController::class, 'create'])->name('atendimento.create');
-    Route::post('/store-atendimento', [AtendimentoController::class, 'store'])->name('atendimento.store');
-    Route::get('/edit-atendimento/{atendimento}', [AtendimentoController::class, 'edit'])->name('atendimento.edit');
-    Route::put('/update-atendimento/{atendimento}', [AtendimentoController::class, 'update'])->name('atendimento.update');
-    Route::delete('/destroy-atendimento/{atendimento}', [AtendimentoController::class, 'destroy'])->name('atendimento.destroy');
+    //funcionarios criados
+    Route::get('/index-funcionario', [FuncionarioController::class, 'index'])->name('funcionario.index');
+    Route::get('/show-funcionario/{funcionario}', [FuncionarioController::class, 'show'])->name('funcionario.show');
+    Route::get('/create-funcionario', [FuncionarioController::class, 'create'])->name('funcionario.create');
+    Route::post('/store-funcionario', [FuncionarioController::class, 'store'])->name('funcionario.store');
+    Route::get('/edit-funcionario/{funcionario}', [FuncionarioController::class, 'edit'])->name('funcionario.edit');
+    Route::put('/update-funcionario/{funcionario}', [FuncionarioController::class, 'update'])->name('funcionario.update');
+    Route::delete('/destroy-funcionario/{funcionario}', [FuncionarioController::class, 'destroy'])->name('funcionario.destroy');
+   
 
     // Requerimentos
     Route::get('/requerimentos', [RequerimentoController::class, 'index'])->name('requerimentos.index');
@@ -87,10 +91,43 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/disciplinas-por-curso/{id}', [App\Http\Controllers\RequerimentoController::class, 'getDisciplinasPorCurso']);
     Route::get('/moodle/cursos/{userid}', [RequerimentoController::class, 'getUserCourses']);
 
+    // atendimentos responsaveis pela tramitação de requerimentos
+    Route::get('/atendimento', [AtendimentoController::class, 'index'])->name('atendimento.index');
+    Route::get('/create-atendimento', [AtendimentoController::class, 'create'])->name('atendimento.create');
+    Route::post('/store-atendimento', [AtendimentoController::class, 'store'])->name('atendimento.store');
+    Route::get('/show-atendimento/{atendimento}', [AtendimentoController::class, 'show'])->name('atendimento.show');
+    Route::get('/edit-atendimento/{atendimento}', [AtendimentoController::class, 'edit'])->name('atendimento.edit');
+    Route::put('/update-atendimento/{atendimento}', [AtendimentoController::class, 'update'])->name('atendimento.update');
+    Route::delete('/destroy-atendimento/{atendimento}', [AtendimentoController::class, 'destroy'])->name('atendimento.destroy');
+
+
     // Permissões
     Route::get('/permissoes', [PermissionController::class, 'index'])->name('permissions.index');
     Route::post('/permissoes', [PermissionController::class, 'store'])->name('permissions.store');
     Route::delete('/permissoes/{id}', [PermissionController::class, 'destroy'])->name('permissions.destroy');
+
+
+    //setor
+    Route::get('/setores', [SetorController::class, 'index'])->name('setores.index');
+    Route::get('/create-setor', [SetorController::class, 'create'])->name('setores.create');
+    Route::post('/store-setor', [SetorController::class, 'store'])->name('setores.store');
+    Route::get('/show-setor', [SetorController::class, 'show'])->name('setores.show');
+    Route::get('/edit-setor/{setor}', [SetorController::class, 'edit'])->name('setores.edit');
+    Route::put('/update-setor/{setor}', [SetorController::class, 'update'])->name('setores.update');
+    Route::delete('/destroy-setor/{setor}', [SetorController::class, 'destroy'])->name('setores.destroy');
+
+    //movimentacao
+
+    Route::get('/movimentacoes', [MovimentacaoController::class, 'index'])->name('movimentacoes.index');
+    Route::get('/create-movimentacao', [MovimentacaoController::class, 'create'])->name('movimentacoes.create');
+    Route::post('/store-movimentacao', [MovimentacaoController::class, 'store'])->name('movimentacoes.store');
+    Route::get('/show-movimentacao/{movimentacao}', [MovimentacaoController::class, 'show'])->name('movimentacoes.show');
+    Route::get('/edit-movimentacao/{movimentacao}', [MovimentacaoController::class, 'edit'])->name('movimentacoes.edit');
+    Route::put('/update-movimentacao/{movimentacao}', [MovimentacaoController::class, 'update'])->name('movimentacoes.update');
+    Route::delete('/destroy-movimentacao/{movimentacao}', [MovimentacaoController::class, 'destroy'])->name('movimentacoes.destroy');
+    Route::post('movimentacoes/{movimentacao}/receber', [MovimentacaoController::class, 'receber'])->name('movimentacoes.receber');
+
+
 
 
     Route::get('/categorias', [MoodleController::class, 'getCategorias'])->name('categorias');
@@ -98,4 +135,3 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('requerimentos', RequerimentoController::class);
 });
-    

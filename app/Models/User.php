@@ -23,6 +23,7 @@ class User extends Authenticatable
         'username',
         'moodle_id',
         'name',
+        'cpf',
         'email',
         'password',
         'role',

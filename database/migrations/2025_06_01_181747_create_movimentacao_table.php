@@ -9,25 +9,30 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('movimentacao', function (Blueprint $table) {
+        Schema::create('movimentacoes', function (Blueprint $table) {
             $table->id();
-
-            $table->foreignId('setor_origem_id')->constrained('setor');
-            $table->foreignId('setor_destino_id')->constrained('setor');
-
-            $table->foreignId('enviado_por')->constrained('users');
-            $table->foreignId('recebido_por')->nullable()->constrained('users');
-
-            $table->dateTime('data_hora_enviado');
-            $table->dateTime('data_hora_recebido')->nullable();
-
-            $table->foreignId('situacao_id')->constrained('situacao_movimentacao');
-
+            $table->unsignedBigInteger('requerimento_id');
+            $table->unsignedBigInteger('setor_origem_id')->nullable();
+            $table->unsignedBigInteger('setor_destino_id');
+            $table->unsignedBigInteger('situacao_movimentacao_id');
+            $table->unsignedBigInteger('enviado_por');
+            $table->unsignedBigInteger('recebido_por')->nullable();
+            $table->timestamp('data_hora_enviado')->nullable();
+            $table->timestamp('data_hora_recebido')->nullable();
+            $table->string('status')->default('Enviado');
             $table->timestamps();
+
+            $table->foreign('requerimento_id')->references('id')->on('requerimentos');
+            $table->foreign('situacao_movimentacao_id')->references('id')->on('situacao_movimentacao');
+            $table->foreign('setor_origem_id')->references('id')->on('setor');
+            $table->foreign('setor_destino_id')->references('id')->on('setor');;
+            $table->foreign('enviado_por')->references('id')->on('users');
+            $table->foreign('recebido_por')->references('id')->on('users');
         });
     }
+
 
     /**
      * Reverse the migrations.

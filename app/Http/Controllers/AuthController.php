@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
-use App\Http\Requests\UserRequest;
 use App\Models\Aluno;
 use App\Models\Funcionario;
 use App\Models\User;
@@ -13,9 +12,8 @@ use App\Models\MoodleUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use App\Services\MoodleService;
+use Illuminate\Support\Facades\Cookie;
 use Exception;
-
 
 class AuthController extends Controller
 {
@@ -30,18 +28,26 @@ class AuthController extends Controller
             'username' => 'required',
             'password' => 'required'
         ]);
-
+            
         try {
-            //  Primeiro tenta autenticar no banco local
-            $user = User::where('username', $request->username)->first();
+            // LOGIN FUNCIONÁRIO
+            $funcionario = Funcionario::where('cpf', $request->username)->first();
+            
+            if ($funcionario) {
+                $user = User::where('username', $funcionario->cpf)->first();
+                if ($user && Hash::check($request->password, $user->password)) {
+                    Auth::login($user);
+                    
+                    // Lembra automaticamente a identificação
+                    Cookie::queue('remembered_username', $request->username, 60 * 24 * 30);
 
-            if ($user && Hash::check($request->password, $user->password)) {
-                //  Login local bem-sucedido
-                Auth::login($user);
-                return redirect()->route('requerimentos.index')->with('success', 'Logado com sucesso!');
+                    return redirect()->route('atendimento.index')->with('success', 'Usuário logado com sucesso!');
+                } else {
+                    return redirect()->back()->withInput()->with('error', 'Usuário ou senha incorretos');
+                }
             }
 
-            //  Se não encontrou localmente, tenta no Moodle
+            // LOGIN MOODLE
             $tokenResponse = Http::asForm()->post(env('MOODLE_LOGIN_URL', 'http://localhost/moodle/login/token.php'), [
                 'username' => $request->username,
                 'password' => $request->password,
@@ -54,7 +60,6 @@ class AuthController extends Controller
 
             $token = $tokenResponse['token'];
 
-            // Busca informações do usuário no Moodle
             $userResponse = Http::get(env('MOODLE_REST_URL', 'http://localhost/moodle/webservice/rest/server.php'), [
                 'wstoken' => $token,
                 'wsfunction' => 'core_user_get_users_by_field',
@@ -64,16 +69,11 @@ class AuthController extends Controller
             ]);
 
             if ($userResponse->failed()) {
-                return redirect()->back()->with('error', 'Erro ao buscar dados do usuário no Moodle');
+                return redirect()->back()->with('error', 'Erro ao buscar dados do usuário');
             }
 
             $moodleUser = $userResponse->json();
 
-            if (empty($moodleUser)) {
-                return redirect()->back()->with('error', 'Usuário não encontrado no Moodle');
-            }
-
-            // Cria o usuário localmente
             $user = User::updateOrCreate(
                 ['username' => $moodleUser[0]['username']],
                 [
@@ -81,12 +81,11 @@ class AuthController extends Controller
                     'username' => $moodleUser[0]['username'],
                     'moodle_id' => $moodleUser[0]['id'],
                     'email' => $moodleUser[0]['email'],
-                    'password' => bcrypt($request->password), // opcionalmente armazena para login local futuro
+                    'password' => bcrypt($request->password),
                     'role' => 'aluno',
                 ]
             );
 
-            // Cria ou atualiza dados do aluno
             Aluno::firstOrCreate(
                 ['user_id' => $user->id],
                 [
@@ -95,12 +94,15 @@ class AuthController extends Controller
                 ]
             );
 
-            // Faz o login local
             Auth::login($user);
 
+            // Lembra automaticamente a identificação
+            Cookie::queue('remembered_username', $request->username, 60 * 24 * 30);
+
             return redirect()->route('requerimentos.index')->with('success', 'Logado com sucesso!');
-        } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Erro ao autenticar: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+            // return redirect()->back()->with('error', 'Erro ao autenticar no Moodle');
         }
     }
 
