@@ -58,10 +58,11 @@ class AuthController extends Controller
                 return redirect()->back()->withInput()->with('error', 'Usuário ou senha incorretos');
             }
 
-            $token = $tokenResponse['token'];
+            // $token = $tokenResponse['token'];
+
 
             $userResponse = Http::get(env('MOODLE_REST_URL', 'http://localhost/moodle/webservice/rest/server.php'), [
-                'wstoken' => $token,
+                'wstoken' => env('MOODLE_TOKEN'),
                 'wsfunction' => 'core_user_get_users_by_field',
                 'field' => 'username',
                 'values[0]' => $request->username,
@@ -73,7 +74,6 @@ class AuthController extends Controller
             }
 
             $moodleUser = $userResponse->json();
-
             $user = User::updateOrCreate(
                 ['username' => $moodleUser[0]['username']],
                 [

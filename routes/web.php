@@ -95,10 +95,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/atendimento', [AtendimentoController::class, 'index'])->name('atendimento.index');
     Route::get('/create-atendimento', [AtendimentoController::class, 'create'])->name('atendimento.create');
     Route::post('/store-atendimento', [AtendimentoController::class, 'store'])->name('atendimento.store');
-    Route::get('/show-atendimento/{atendimento}', [AtendimentoController::class, 'show'])->name('atendimento.show');
+    Route::get('/show-atendimento/{id}', [AtendimentoController::class, 'show'])->name('atendimento.show');
     Route::get('/edit-atendimento/{atendimento}', [AtendimentoController::class, 'edit'])->name('atendimento.edit');
     Route::put('/update-atendimento/{atendimento}', [AtendimentoController::class, 'update'])->name('atendimento.update');
     Route::delete('/destroy-atendimento/{atendimento}', [AtendimentoController::class, 'destroy'])->name('atendimento.destroy');
+    
 
 
     // Permissões

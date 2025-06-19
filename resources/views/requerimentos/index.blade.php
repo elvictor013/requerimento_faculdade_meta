@@ -1,6 +1,7 @@
-@extends('layouts.admin')
+@extends('layouts.aluno')
 
 @section('content')
+<br>
 <!-- Greeting and Button -->
 <header class="container-fluid bg-gradient-to-b from-light py-4 position-relative" style="background: linear-gradient(to bottom, #f7f9fc, #f3f5f9);">
     <div class="container d-flex justify-content-between align-items-center position-relative">

@@ -33,4 +33,9 @@ class Requerimento extends Model
     {
         return $this->belongsTo(Aluno::class);
     }
+
+    public function atendente()
+    {
+        return $this->belongsTo(User::class, 'atendente_id');
+    }
 }
