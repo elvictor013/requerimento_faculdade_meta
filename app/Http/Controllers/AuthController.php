@@ -55,7 +55,8 @@ class AuthController extends Controller
             ]);
 
             if ($tokenResponse->failed() || isset($tokenResponse['error'])) {
-                return redirect()->back()->withInput()->with('error', 'Usuário ou senha incorretos');
+                return response()->json(['error' => 'Usuário ou senha incorretos'], 401);
+                // return redirect()->back()->withInput()->with('error', 'Usuário ou senha incorretos');
             }
 
             // $token = $tokenResponse['token'];
@@ -101,8 +102,8 @@ class AuthController extends Controller
 
             return redirect()->route('requerimentos.index')->with('success', 'Logado com sucesso!');
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-            // return redirect()->back()->with('error', 'Erro ao autenticar no Moodle');
+            // return response()->json(['error' => $e->getMessage()], 500);
+             return redirect()->back()->with('error', 'Erro ao autenticar no Moodle');
         }
     }
 

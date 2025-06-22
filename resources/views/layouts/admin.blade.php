@@ -16,63 +16,6 @@
       font-family: "Montserrat", sans-serif;
       background-color: #f3f5f9;
       color: #1a1a1a;
-      min-height: 100vh;
-    }
-
-    .table thead th {
-      vertical-align: middle;
-    }
-
-    .filter-section {
-      background: white;
-      padding: 1rem;
-      border-radius: 0.5rem;
-      box-shadow: 0 0 8px rgb(0 0 0 / 0.1);
-      margin-bottom: 1.5rem;
-    }
-
-    .table-responsive {
-      background: white;
-      border-radius: 0.5rem;
-      box-shadow: 0 0 8px rgb(0 0 0 / 0.1);
-      padding: 1rem;
-    }
-
-    .btn-icon {
-      width: 36px;
-      height: 36px;
-      padding: 0;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 0.25rem;
-      border-radius: 0.375rem;
-    }
-
-    .btn-icon:last-child {
-      margin-right: 0;
-    }
-
-    .btn-view {
-      color: #0d6efd;
-      border-color: #0d6efd;
-    }
-
-    .btn-view:hover,
-    .btn-view:focus {
-      background-color: #0d6efd;
-      color: white;
-    }
-
-    .btn-download {
-      color: #198754;
-      border-color: #198754;
-    }
-
-    .btn-download:hover,
-    .btn-download:focus {
-      background-color: #198754;
-      color: white;
     }
   </style>
 </head>
@@ -97,6 +40,9 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-4 mb-2 mb-md-0">
           <li class="nav-item">
+            <a class="nav-link" href="{{ route('atendimento.index') }}">Página inicial</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="{{ route('funcionario.index') }}">Funcionario</a>
           </li>
           <li class="nav-item">
@@ -107,9 +53,9 @@
             <a class="nav-link" href="{{ route('movimentacoes.index') }}">Movimentações</a>
           </li>
 
-          <!-- <li class="nav-item">
+          <li class="nav-item">
             <a class="nav-link" href="{{ route('user.index') }}">Usuarios</a>
-          </li> -->
+          </li>
         </ul>
       </div>
 

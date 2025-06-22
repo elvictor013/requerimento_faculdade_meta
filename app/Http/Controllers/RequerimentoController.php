@@ -16,26 +16,43 @@ use Illuminate\Support\Facades\Http;
 
 class RequerimentoController extends Controller
 {
-    public function download($id)
+    public function downloadAnexo($id)
     {
         $requerimento = Requerimento::findOrFail($id);
+        $this->authorizeDownload($requerimento); // opcional
 
-        if ($requerimento->user_id !== auth()->id()) {
-            abort(403, 'Você não tem permissão para acessar este arquivo.');
+        $filePath = $requerimento->anexo_resposta_atendente; // CORRETO AGORA
+
+        if (!$filePath || !file_exists(storage_path("app/public/{$filePath}"))) {
+            abort(404, 'Anexo da resposta não encontrado.');
         }
 
-        if (!$requerimento->anexo || !file_exists(storage_path("app/public/{$requerimento->anexo}"))) {
-            abort(404, 'Arquivo não encontrado.');
-        }
-
-        return response()->download(storage_path("app/public/{$requerimento->anexo}"));
+        return response()->download(storage_path("app/public/{$filePath}"));
     }
 
-    // public function getDisciplinasPorCurso($id)
-    // {
-    //     $disciplinas = Discipline::where('course_id', $id)->get();
-    //     return response()->json($disciplinas);
-    // }
+    public function responderAluno(Request $request, $id)
+    {
+        $request->validate([
+            'mensagem' => 'required|string',
+            'anexo_resposta' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:5120',
+        ]);
+
+        $requerimento = Requerimento::findOrFail($id);
+        $requerimento->resposta_atendente = $request->mensagem;
+
+        if ($request->hasFile('anexo_resposta')) {
+            $anexo = $request->file('anexo_resposta');
+            $anexoPath = $anexo->store('respostas_anexos', 'public');
+            $requerimento->anexo_resposta_atendente = $anexoPath;
+        }
+
+        $requerimento->status = 'Respondido';
+        $requerimento->save();
+
+        return redirect()->route('requerimentos.show', $requerimento->id)
+            ->with('success', 'Resposta enviada com sucesso!');
+    }
+
 
     public function index(Request $request)
     {
@@ -113,7 +130,7 @@ class RequerimentoController extends Controller
             'wsfunction' => 'core_course_get_categories',
             'moodlewsrestformat' => 'json',
         ];
-      
+
         $responseCategories = Http::get($url, $paramsCategories);
 
         if ($responseCategories->failed()) {

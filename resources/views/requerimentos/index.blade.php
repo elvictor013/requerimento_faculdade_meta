@@ -87,7 +87,7 @@
                     @forelse ($requerimentos as $requerimento)
                     <tr>
                         <td>{{ $requerimento->protocolo }}</td>
-                        <td>{{$requerimento->tipo_requerimento}}</td>
+                        <td>{{ $requerimento->tipo_requerimento}}</td>
                         <td>{{ $requerimento->status }}</td>
                         <td>{{ $requerimento->created_at->format('d/m/Y') }}</td>
                         <td class="text-center">

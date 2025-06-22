@@ -77,19 +77,27 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/edit-funcionario/{funcionario}', [FuncionarioController::class, 'edit'])->name('funcionario.edit');
     Route::put('/update-funcionario/{funcionario}', [FuncionarioController::class, 'update'])->name('funcionario.update');
     Route::delete('/destroy-funcionario/{funcionario}', [FuncionarioController::class, 'destroy'])->name('funcionario.destroy');
-   
 
-    // Requerimentos
-    Route::get('/requerimentos', [RequerimentoController::class, 'index'])->name('requerimentos.index');
-    Route::get('/create-requerimento', [RequerimentoController::class, 'create'])->name('requerimentos.create');
-    Route::post('/store-requerimento', [RequerimentoController::class, 'store'])->name('requerimentos.store');
-    Route::get('/show-requerimento/{requerimento}', [RequerimentoController::class, 'show'])->name('requerimentos.show');
-    Route::get('/edit-requerimento/{requerimento}', [RequerimentoController::class, 'edit'])->name('requerimentos.edit');
-    Route::put('/update-requerimento/{requerimento}', [RequerimentoController::class, 'update'])->name('requerimentos.update');
-    Route::delete('/destroy-requerimento/{requerimento}', [RequerimentoController::class, 'destroy'])->name('requerimentos.destroy');
-    Route::get('/requerimentos/download/{id}', [RequerimentoController::class, 'download'])->name('requerimentos.download');
-    Route::get('/disciplinas-por-curso/{id}', [App\Http\Controllers\RequerimentoController::class, 'getDisciplinasPorCurso']);
-    Route::get('/moodle/cursos/{userid}', [RequerimentoController::class, 'getUserCourses']);
+
+        // Requerimentos
+        Route::get('/requerimentos', [RequerimentoController::class, 'index'])->name('requerimentos.index');
+        Route::get('/create-requerimento', [RequerimentoController::class, 'create'])->name('requerimentos.create');
+        Route::post('/store-requerimento', [RequerimentoController::class, 'store'])->name('requerimentos.store');
+        Route::get('/show-requerimento/{requerimento}', [RequerimentoController::class, 'show'])->name('requerimentos.show');
+        Route::get('/edit-requerimento/{requerimento}', [RequerimentoController::class, 'edit'])->name('requerimentos.edit');
+        Route::put('/update-requerimento/{requerimento}', [RequerimentoController::class, 'update'])->name('requerimentos.update');
+        Route::delete('/destroy-requerimento/{requerimento}', [RequerimentoController::class, 'destroy'])->name('requerimentos.destroy');
+        //  Route::get('/requerimentos/download/{id}', [RequerimentoController::class, 'download'])->name('requerimentos.download');
+        Route::get('/disciplinas-por-curso/{id}', [App\Http\Controllers\RequerimentoController::class, 'getDisciplinasPorCurso']);
+        Route::get('/moodle/cursos/{userid}', [RequerimentoController::class, 'getUserCourses']);
+
+        Route::get('/requerimentos/{id}/download', [RequerimentoController::class, 'download'])->name('requerimentos.download');
+        Route::get('/requerimentos/{id}/download-anexo', [RequerimentoController::class, 'downloadAnexo'])->name('requerimentos.downloadAnexo');
+
+
+    // Route::get('/requerimentos/{id}/download-anexo', [RequerimentoController::class, 'downloadAnexo'])->name('requerimentos.download');
+    // Route::get('/requerimentos/{id}/download-resposta', [RequerimentoController::class, 'downloadResposta'])->name('requerimentos.download.resposta');
+
 
     // atendimentos responsaveis pela tramitação de requerimentos
     Route::get('/atendimento', [AtendimentoController::class, 'index'])->name('atendimento.index');
@@ -99,7 +107,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/edit-atendimento/{atendimento}', [AtendimentoController::class, 'edit'])->name('atendimento.edit');
     Route::put('/update-atendimento/{atendimento}', [AtendimentoController::class, 'update'])->name('atendimento.update');
     Route::delete('/destroy-atendimento/{atendimento}', [AtendimentoController::class, 'destroy'])->name('atendimento.destroy');
-    
+    // responder requerimento
+    Route::post('/requerimentos/{id}/resposta', [RequerimentoController::class, 'responderAluno'])->name('requerimentos.responderAluno');
+
+
 
 
     // Permissões

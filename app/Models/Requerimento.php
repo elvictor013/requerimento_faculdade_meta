@@ -21,6 +21,8 @@ class Requerimento extends Model
         'anexo',
         'status',
         'protocolo',
+        'resposta_atendente',
+        'atendente_id',
     ];
 
     public function movimentacoes()
