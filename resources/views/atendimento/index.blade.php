@@ -64,9 +64,11 @@
                             <i class="fas fa-eye"></i>
                         </a>
 
-                        <button class="btn btn-sm btn-outline-success btn-icon btn-download" title="Baixar Anexo" onclick="alert('Baixar anexo {{ $requerimento->protocolo }}')">
+                        <a href="{{ route('requerimentos.download', ['id' => $requerimento->id]) }}"
+                            class="btn btn-sm btn-outline-success btn-icon"
+                            title="Download">
                             <i class="fas fa-download"></i>
-                        </button>
+                        </a>
                     </td>
                 </tr>
                 @empty

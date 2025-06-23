@@ -16,12 +16,24 @@ use Illuminate\Support\Facades\Http;
 
 class RequerimentoController extends Controller
 {
+    public function download($id)
+    {
+        $requerimento = Requerimento::findOrFail($id);
+
+        $filePath = $requerimento->anexo;
+
+        if (!$filePath || !file_exists(storage_path("app/public/{$filePath}"))) {
+            abort(404, 'Arquivo de anexo não encontrado.');
+        }
+
+        return response()->download(storage_path("app/public/{$filePath}"));
+    }
+
     public function downloadAnexo($id)
     {
         $requerimento = Requerimento::findOrFail($id);
-        $this->authorizeDownload($requerimento); // opcional
 
-        $filePath = $requerimento->anexo_resposta_atendente; // CORRETO AGORA
+        $filePath = $requerimento->anexo_resposta_atendente;
 
         if (!$filePath || !file_exists(storage_path("app/public/{$filePath}"))) {
             abort(404, 'Anexo da resposta não encontrado.');
@@ -30,12 +42,17 @@ class RequerimentoController extends Controller
         return response()->download(storage_path("app/public/{$filePath}"));
     }
 
+
+
     public function responderAluno(Request $request, $id)
     {
+        
+        
         $request->validate([
             'mensagem' => 'required|string',
             'anexo_resposta' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:5120',
         ]);
+        
 
         $requerimento = Requerimento::findOrFail($id);
         $requerimento->resposta_atendente = $request->mensagem;
@@ -49,7 +66,7 @@ class RequerimentoController extends Controller
         $requerimento->status = 'Respondido';
         $requerimento->save();
 
-        return redirect()->route('requerimentos.show', $requerimento->id)
+        return redirect()->route('atendimento.show', $requerimento->id)
             ->with('success', 'Resposta enviada com sucesso!');
     }
 

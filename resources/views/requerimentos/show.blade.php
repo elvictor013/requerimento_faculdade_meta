@@ -27,13 +27,14 @@
                 <p>{{ $requerimento->resposta_atendente }}</p>
 
                 @if($requerimento->anexo_resposta_atendente)
-                <p class="mt-2 mb-0">
+                <p>
                     <strong>Anexo da Resposta:</strong>
                     <a href="{{ route('requerimentos.downloadAnexo', $requerimento->id) }}" target="_blank">
                         Baixar Anexo da Resposta
                     </a>
                 </p>
                 @endif
+
             </div>
             @endif
 
