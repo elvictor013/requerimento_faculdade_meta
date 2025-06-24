@@ -43,16 +43,31 @@ class RequerimentoController extends Controller
     }
 
 
+    public function atualizarStatus(Request $request, $id)
+    {
+        $status = $request->input('status');
+
+        if (!in_array($status, ['Aprovado', 'Reprovado'])) {
+            return redirect()->back()->with('error', 'Status inválido.');
+        }
+
+        $requerimento = Requerimento::findOrFail($id);
+        $requerimento->status = $status;
+        $requerimento->save();
+
+        return redirect()->back()->with('success', "Requerimento {$status} com sucesso!");
+    }
+
+
 
     public function responderAluno(Request $request, $id)
     {
-        
-        
+
         $request->validate([
             'mensagem' => 'required|string',
             'anexo_resposta' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:5120',
         ]);
-        
+
 
         $requerimento = Requerimento::findOrFail($id);
         $requerimento->resposta_atendente = $request->mensagem;
@@ -68,6 +83,41 @@ class RequerimentoController extends Controller
 
         return redirect()->route('atendimento.show', $requerimento->id)
             ->with('success', 'Resposta enviada com sucesso!');
+    }
+
+    public function encaminhar(Request $request, $id)
+    {
+        $request->validate([
+            'setor_id' => 'required|exists:setor,id',
+        ]);
+
+        $requerimento = Requerimento::findOrFail($id);
+        $user = Auth::user();
+        $setorOrigemId = $user->funcionario->setor_id;
+
+        // Garante que esse setor é quem está com o requerimento
+        if (!$requerimento->movimentacoes()
+            ->where('setor_destino_id', $setorOrigemId)
+            ->where('recebido_por', $user->id)
+            ->exists()) {
+            return back()->with('error', 'Você não pode encaminhar este requerimento.');
+        }
+
+        // Cria a nova movimentação
+        Movimentacao::create([
+            'requerimento_id' => $requerimento->id,
+            'setor_origem_id' => $setorOrigemId,
+            'setor_destino_id' => $request->setor_id,
+            'situacao_movimentacao_id' => 1, // ajuste conforme sua tabela
+            'enviado_por' => $user->id,
+            'data_hora_enviado' => now(),
+            'status' => 'Encaminhado',
+        ]);
+
+        $requerimento->status = 'Encaminhado';
+        $requerimento->save();
+
+        return redirect()->route('atendimento.show', $requerimento->id)->with('success', 'Requerimento encaminhado com sucesso.');
     }
 
 
@@ -105,8 +155,49 @@ class RequerimentoController extends Controller
     {
         $requerimento = $requerimento->load('aluno');
 
-        return view('requerimentos.show', ['requerimento' => $requerimento]);
+        $token = env('MOODLE_TOKEN');
+        $url = env('MOODLE_REST_URL');
+        $courseName = 'Não informado';
+        $categoryName = 'Não informado';
+
+        if ($requerimento->course_id) {
+            $responseCourse = Http::get($url, [
+                'wstoken' => $token,
+                'wsfunction' => 'core_course_get_courses_by_field',
+                'moodlewsrestformat' => 'json',
+                'field' => 'id',
+                'value' => $requerimento->course_id,
+            ]);
+
+            $data = $responseCourse->json();
+
+            if (isset($data['courses']) && count($data['courses']) > 0) {
+                $courseName = $data['courses'][0]['fullname'] ?? 'Não informado';
+            } else {
+                logger("Curso não encontrado para ID: {$requerimento->course_id}");
+            }
+        }
+
+
+        if ($requerimento->category_id) {
+            $responseCategories = Http::get($url, [
+                'wstoken' => $token,
+                'wsfunction' => 'core_course_get_categories',
+                'moodlewsrestformat' => 'json',
+            ]);
+
+            if ($responseCategories->ok()) {
+                foreach ($responseCategories->json() as $category) {
+                    if ((int)$category['id'] === (int)$requerimento->category_id) {
+                        $categoryName = $category['name'];
+                        break;
+                    }
+                }
+            }
+        }
+        return view('requerimentos.show', compact('requerimento', 'courseName', 'categoryName'));
     }
+
 
     public function create()
     {
@@ -166,7 +257,7 @@ class RequerimentoController extends Controller
             $request->validate([
                 'category_id' => 'required|numeric',
                 'semestre' => 'required|string',
-                'course_id' => 'required|numeric',
+                'course_id' => 'numeric',
                 'tipo_requerimento' => 'required|string',
                 'descricao' => 'required|string',
                 'anexo' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:2048',
@@ -198,6 +289,7 @@ class RequerimentoController extends Controller
                 'enviado_por' => auth()->user()->id,
                 'data_hora_enviado' => now(),
                 'status' => 'Enviado',
+                
             ]);
 
 

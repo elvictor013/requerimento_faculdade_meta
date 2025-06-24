@@ -40,4 +40,6 @@ class Requerimento extends Model
     {
         return $this->belongsTo(User::class, 'atendente_id');
     }
+
+   
 }

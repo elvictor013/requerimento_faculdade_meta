@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
+<br>
 <div class="container">
     <h1 class="mb-4">Detalhes do Requerimento</h1>
 
@@ -12,13 +13,10 @@
             <p><strong>Tipo:</strong> {{ $requerimento->tipo_requerimento }}</p>
             <p><strong>Descrição:</strong> {{ $requerimento->descricao }}</p>
             <p><strong>Status:</strong> {{ $requerimento->status }}</p>
-
-            <p><strong>Curso:</strong>
-                {{ $requerimento->categoria->nome ?? 'Não informado' }}
-            </p>
-
+            <p><strong>Curso:</strong> {{ $categoryName }}</p>
+            <p><strong>Disciplina:</strong> {{ $courseName }}</p>
             <p><strong>Semestre:</strong> {{ $requerimento->semestre }}</p>
-            <p><strong>Data de Criação:</strong> {{ $requerimento->created_at->format('d/m/Y H:i') }}</p>
+            <p><strong>Data de Criação:</strong> {{ $requerimento->created_at->format('d/m/Y') }}</p>
             <p><strong>Resposta:</strong></p>
 
             @if($requerimento->resposta_atendente)

@@ -93,6 +93,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/requerimentos/{id}/download', [RequerimentoController::class, 'download'])->name('requerimentos.download');
     Route::get('/requerimentos/{id}/download-anexo', [RequerimentoController::class, 'downloadAnexo'])->name('requerimentos.downloadAnexo');
 
+    // encaminhar requerimento
+    Route::post('/requerimentos/{id}/encaminhar', [RequerimentoController::class, 'encaminhar'])->name('requerimentos.encaminhar');
+
+    Route::post('/requerimentos/{id}/status', [RequerimentoController::class, 'atualizarStatus'])
+    ->name('requerimentos.atualizarStatus');
+
+
+
+
     // atendimentos responsaveis pela tramitação de requerimentos
     Route::get('/atendimento', [AtendimentoController::class, 'index'])->name('atendimento.index');
     Route::get('/create-atendimento', [AtendimentoController::class, 'create'])->name('atendimento.create');
@@ -101,6 +110,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/edit-atendimento/{atendimento}', [AtendimentoController::class, 'edit'])->name('atendimento.edit');
     Route::put('/update-atendimento/{atendimento}', [AtendimentoController::class, 'update'])->name('atendimento.update');
     Route::delete('/destroy-atendimento/{atendimento}', [AtendimentoController::class, 'destroy'])->name('atendimento.destroy');
+    // Route::post('/requerimentos/{id}/encaminhar', [AtendimentoController::class, 'encaminhar'])->name('atendimento.encaminhar');
     // responder requerimento
     Route::post('/requerimentos/{id}/resposta', [RequerimentoController::class, 'responderAluno'])->name('requerimentos.responderAluno');
 

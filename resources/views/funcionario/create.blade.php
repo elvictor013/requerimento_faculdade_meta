@@ -59,11 +59,11 @@
             <!-- setor do funcionario -->
 
             <div class="mb-3">
-                <label class="form-label fw-semibold" for="setor_id">Setor</label>
+                <label class="form-label" for="setor_id">Setor</label>
                 <select class="form-select" id="setor_id" name="setor_id" required>
                     <option value="" disabled selected>Selecione o setor</option>
                     @foreach($setores as $setor)
-                    <option value="{{ $setor['id'] }}">{{ $setor['descricao'] }}</option>
+                    <option value="{{ $setor['id'] }}">{{ $setor['nome'] }}</option>
                     @endforeach
                 </select>
             </div>

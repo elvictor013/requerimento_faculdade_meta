@@ -55,8 +55,8 @@ class AuthController extends Controller
             ]);
 
             if ($tokenResponse->failed() || isset($tokenResponse['error'])) {
-                return response()->json(['error' => 'Usuário ou senha incorretos'], 401);
-                // return redirect()->back()->withInput()->with('error', 'Usuário ou senha incorretos');
+                // return response()->json(['error' => 'Usuário ou senha incorretos'], 401);
+                     return redirect()->back()->withInput()->with('error', 'Usuário ou senha incorretos');
             }
 
             // $token = $tokenResponse['token'];
@@ -84,6 +84,7 @@ class AuthController extends Controller
                     'email' => $moodleUser[0]['email'],
                     'password' => bcrypt($request->password),
                     'role' => 'aluno',
+                    'setor_id' => ['id'],
                 ]
             );
 

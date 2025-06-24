@@ -49,14 +49,6 @@
             <a class="nav-link" href="{{ route('setores.index') }}">Setores</a>
           </li>
 
-          <li class="nav-item">
-            <a class="nav-link" href="{{ route('movimentacoes.index') }}">Movimentações</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="{{ route('user.index') }}">Usuarios</a>
-          </li>
-        </ul>
       </div>
 
       <div class="d-flex align-items-center gap-3 position-relative">
@@ -73,12 +65,7 @@
           aria-labelledby="perfilDropdown"
           class="dropdown-menu dropdown-menu-end shadow"
           style="min-width: 180px;">
-          <li>
-            <a class="dropdown-item" href="#">Perfil</a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">Configurações</a>
-          </li>
+         
           <li>
             <hr class="dropdown-divider" />
           </li>

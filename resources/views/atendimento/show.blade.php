@@ -66,12 +66,22 @@
     <h1>Visualizar Requerimento</h1>
 
     <div class="btn-top-actions">
-        <button type="button" class="btn btn-success" onclick="alert('Requerimento aprovado')">
-            <i class="fas fa-check"></i> Aprovar
-        </button>
-        <button type="button" class="btn btn-danger" onclick="alert('Requerimento reprovado')">
-            <i class="fas fa-times"></i> Reprovar
-        </button>
+        <form method="POST" action="{{ route('requerimentos.atualizarStatus', $requerimento->id) }}" class="d-inline">
+            @csrf
+            <input type="hidden" name="status" value="Aprovado">
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-check"></i> Aprovar
+            </button>
+        </form>
+
+        <form method="POST" action="{{ route('requerimentos.atualizarStatus', $requerimento->id) }}" class="d-inline">
+            @csrf
+            <input type="hidden" name="status" value="Reprovado">
+            <button type="submit" class="btn btn-danger">
+                <i class="fas fa-times"></i> Reprovar
+            </button>
+        </form>
+
         <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#encaminharModal">
             <i class="fas fa-share"></i> Encaminhar
         </button>
@@ -90,10 +100,17 @@
         <div class="description">{{ $requerimento->descricao }}</div>
     </div>
 
+    <div class="row-item">
+        <span class="label">Resposta do setor</span>
+        <div class="description">{{ $requerimento->resposta_atendente }}</div>
+    </div>
+
     <!-- Seu textarea fora do modal -->
     <div class="mb-3">
         <label for="responseText" class="form-label">Mensagem</label>
-        <textarea class="form-control" id="responseText" rows="4" placeholder="Digite sua mensagem..."></textarea>
+        <textarea class="form-control" id="responseText" rows="4"
+            name="mensagem" placeholder="Digite sua mensagem...">{{ old('mensagem', $requerimento->mensagem ?? '') }}</textarea>
+
     </div>
 
     <!-- Botão para abrir modal -->
@@ -138,21 +155,19 @@
     <div class="modal fade" id="encaminharModal" tabindex="-1" aria-labelledby="encaminharModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <form method="POST" action="{{ route('requerimentos.responderAluno', $requerimento->id) }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('requerimentos.encaminhar', $requerimento->id) }}">
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title">Encaminhar Requerimento</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
-                    <div class="modal-body">
-                        <label for="setorSelect" class="form-label">Selecione o setor</label>
-                        <select id="setorSelect" name="setor" class="form-select" required>
-                            <option value="" selected disabled>Selecione um setor</option>
-                            <option value="financeiro">Financeiro</option>
-                            <option value="academico">Acadêmico</option>
-                            <option value="secretaria">Secretaria</option>
-                            <option value="tecnico">Técnico</option>
-                            <option value="outros">Outros</option>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" for="setor_id">Setor</label>
+                        <select class="form-select" id="setor_id" name="setor_id" required>
+                            <option value="" disabled selected>Selecione o setor</option>
+                            @foreach($setores as $setor)
+                            <option value="{{ $setor['id'] }}">{{ $setor['nome'] }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="modal-footer">

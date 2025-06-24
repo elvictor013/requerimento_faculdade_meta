@@ -19,7 +19,7 @@
 
         <!-- Categoria -->
         <div class="mb-3">
-            <label class="form-label fw-semibold" for="category_id">Curso</label>
+            <label class="form-label fw-semibold" for="category_id">Curso*</label>
             <select class="form-select" id="category_id" name="category_id">
                 <option value="" disabled selected>Selecione uma categoria</option>
                 @foreach($categories as $category)
@@ -32,7 +32,7 @@
         <!-- Semestre -->
 
         <div class="mb-3">
-            <label class="form-label fw-semibold" for="semestre">Semestre</label>
+            <label class="form-label fw-semibold" for="semestre">Semestre*</label>
             <select class="form-select" id="semestre" name="semestre" required>
                 <option value="" disabled selected>Selecione um semestre</option>
                 <option value="1"> 1º Semestre</option>
@@ -51,7 +51,7 @@
         <!-- Curso -->
         <div class="mb-3">
             <label class="form-label fw-semibold" for="course_id">Disciplina</label>
-            <select class="form-select" id="course_id" name="course_id" required>
+            <select class="form-select" id="course_id" name="course_id">
                 <option value="" disabled selected>Selecione um curso</option>
                 @foreach($courses as $course)
                 <option value="{{ $course['id'] }}">{{ $course['fullname'] }}</option>
@@ -63,7 +63,7 @@
 
         <!-- Tipo de Requerimento -->
         <div class="mb-3">
-            <label class="form-label fw-semibold" for="tipo_requerimento">Tipo de Requerimento</label>
+            <label class="form-label fw-semibold" for="tipo_requerimento">Tipo de Requerimento*</label>
             <select class="form-select" id="tipo_requerimento" name="tipo_requerimento" required>
                 <option value="" disabled selected>Selecione o tipo de requerimento</option>
                 <option value="Trancamento">Trancamento</option>
@@ -87,18 +87,10 @@
 
         </div>
 
-        <!-- Disciplina -->
-        <!-- <div class="mb-3" id="campo_disciplina" style="display: none;">
-            <label class="form-label fw-semibold" for="discipline_id">Disciplina</label>
-            <select id="discipline_id" name="discipline_id[]" class="form-select" multiple>
-                <option value="">Selecione a disciplina</option>
-            </select>
-            <small class="text-muted">Segure Ctrl (ou Cmd no Mac) para selecionar várias disciplinas</small>
-        </div> -->
 
         <!-- Descrição -->
         <div class="mb-3">
-            <label class="form-label fw-semibold" for="descricaoTextarea">Descrição</label>
+            <label class="form-label fw-semibold" for="descricaoTextarea">Descrição*</label>
             <textarea class="form-control" id="descricaoTextarea" name="descricao" placeholder="Descreva o motivo do requerimento" required rows="4"></textarea>
         </div>
 

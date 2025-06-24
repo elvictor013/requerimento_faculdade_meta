@@ -28,7 +28,7 @@
                     <td>{{ $funcionario->user->name }}</td>
                     <td>{{ $funcionario->cpf }}</td>
                     <td>{{ $funcionario->user->email }}</td>
-                    <td>{{ $funcionario->tipo_funcionario }}</td>
+                    <td>{{ $funcionario->user->role}}</td>
                     <td class="text-center">
                         <a href="{{ route('funcionario.show', ['funcionario' => $funcionario->id]) }}"
                             class="btn btn-sm btn-outline-primary btn-icon"

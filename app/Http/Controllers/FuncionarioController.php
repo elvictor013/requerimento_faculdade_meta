@@ -35,14 +35,15 @@ class FuncionarioController extends Controller
             'name'     => $request->name,
             'email'    => $request->email,
             'username' => $request->cpf,
-            'role'     => $request->role,
+            'role'     => $request->tipo_funcionario,
+            'setor_id' => $request->setor_id,
             'password' => bcrypt($request->password),
         ]);
 
         Funcionario::create([
             'user_id'          => $user->id,
             'cpf'              => $request->cpf,
-            'tipo_funcionario' => $request->role,
+            'tipo_funcionario' => $request-> role,
             'setor_id'         => $request->setor_id,
         ]);
 

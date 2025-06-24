@@ -4,7 +4,7 @@
 
 <br><br>
 <main class="container">
-    <h1 class="mb-4 fw-bold">Histórico de Requerimentos - Atendente {{ Auth::user()->name }}</h1>
+    <h1 class="mb-4 fw-bold">Histórico de Requerimentos - Olá, {{ Auth::user()->name }}</h1>
 
     <section class="filter-section">
         <form id="filterForm" class="row g-3 align-items-center">
